@@ -6,13 +6,16 @@ import { connectDB } from "./config/database.js";
 // Route files
 import { router as bootcamps } from "./routes/bootcamps.js";
 
+const app = express();
+
+// Body Parser
+app.use(express.json());
+
 // Load env vars
 config({ path: "./config/config.env" });
 
 // Connect to database
 connectDB();
-
-const app = express();
 
 // Dev logging middleware
 if (process.env.NODE_ENV === "development") {
