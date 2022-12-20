@@ -1,0 +1,17 @@
+{
+	"name": "devcamper_project",
+	"version": "1.0.0",
+	"description": "Brad Traversy NodeJS course",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "NODE_ENV=production node index",
+		"dev": "nodemon index"
+	},
+	"author": "davidsalomon",
+	"license": "MIT",
+	"dependencies": {
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2"
+	}
+}
