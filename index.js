@@ -2,17 +2,18 @@ import express from "express";
 import { config } from "dotenv";
 import morgan from "morgan";
 import colors from "colors";
+import { errorHandler } from "./middleware/error.js";
 import { connectDB } from "./config/database.js";
 // Route files
 import { router as bootcamps } from "./routes/bootcamps.js";
 
 const app = express();
+config({ path: "./config/config.env" });
 
 // Body Parser
 app.use(express.json());
 
 // Load env vars
-config({ path: "./config/config.env" });
 
 // Connect to database
 connectDB();
@@ -27,6 +28,9 @@ app.use("/api/v1/bootcamps", bootcamps);
 
 const PORT = process.env.PORT || 5000;
 
+// Error handler
+app.use(errorHandler);
+
 const server = app.listen(
 	PORT,
 	console.log(
@@ -39,3 +43,5 @@ process.on("unhandledRejection", (error, promise) => {
 	console.log(`Error: ${error.message}`.red);
 	server.close(() => process.exit(1));
 });
+
+console.log(process.env.GEOCODER_PROVIDER);
