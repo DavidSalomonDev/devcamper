@@ -1,19 +1,24 @@
 import express from "express";
-import { config } from "dotenv";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 import morgan from "morgan";
 import colors from "colors";
 import { errorHandler } from "./middleware/error.js";
 import { connectDB } from "./config/database.js";
+
 // Route files
 import { router as bootcamps } from "./routes/bootcamps.js";
 
 const app = express();
-config({ path: "./config/config.env" });
 
 // Body Parser
 app.use(express.json());
 
 // Load env vars
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+dotenv.config({ path: `${__dirname}/config/config.env` });
 
 // Connect to database
 connectDB();
@@ -43,5 +48,3 @@ process.on("unhandledRejection", (error, promise) => {
 	console.log(`Error: ${error.message}`.red);
 	server.close(() => process.exit(1));
 });
-
-console.log(process.env.GEOCODER_PROVIDER);
