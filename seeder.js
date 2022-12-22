@@ -4,7 +4,10 @@ import { fileURLToPath } from "url";
 import { connect, set } from "mongoose";
 import dotenv from "dotenv";
 import colors from "colors";
+
+// Load models
 import Bootcamp from "./models/Bootcamp.js";
+import Course from "./models/Course.js";
 
 const __fileURLToPatch = fileURLToPath(import.meta.url);
 const __dirname = dirname(__fileURLToPatch);
@@ -17,13 +20,18 @@ connect(process.env.MONGO_URI, {
 	useUnifiedTopology: true,
 });
 
+// Read JSON files
 const bootcamps = JSON.parse(
 	fs.readFileSync(`${__dirname}/resources/_data/bootcamps.json`, "utf-8")
+);
+const courses = JSON.parse(
+	fs.readFileSync(`${__dirname}/resources/_data/courses.json`, "utf-8")
 );
 
 const importData = async () => {
 	try {
 		await Bootcamp.create(bootcamps);
+		await Course.create(courses);
 		console.log("Data Imported".green.inverse);
 		process.exit();
 	} catch (error) {
@@ -34,6 +42,7 @@ const importData = async () => {
 const deleteData = async () => {
 	try {
 		await Bootcamp.deleteMany();
+		await Course.deleteMany();
 		console.log("Data Destroyed".red.inverse);
 		process.exit();
 	} catch (error) {

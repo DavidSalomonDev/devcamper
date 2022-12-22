@@ -9,6 +9,7 @@ import { connectDB } from "./config/database.js";
 
 // Route files
 import { router as bootcamps } from "./routes/bootcamps.js";
+import { router as courses } from "./routes/courses.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === "development") {
 
 // Mount routers
 app.use("/api/v1/bootcamps", bootcamps);
+app.use("/api/v1/courses", courses);
 
 const PORT = process.env.PORT || 5000;
 
