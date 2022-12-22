@@ -1,7 +1,7 @@
-import express from "express";
+import dotenv from "dotenv";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import dotenv from "dotenv";
+import express from "express";
 import morgan from "morgan";
 import colors from "colors";
 import { errorHandler } from "./middleware/error.js";
@@ -16,8 +16,8 @@ const app = express();
 app.use(express.json());
 
 // Load env vars
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __fileURLToPatch = fileURLToPath(import.meta.url);
+const __dirname = dirname(__fileURLToPatch);
 dotenv.config({ path: `${__dirname}/config/config.env` });
 
 // Connect to database

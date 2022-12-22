@@ -2,8 +2,13 @@ import fs from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { connect, set } from "mongoose";
+import dotenv from "dotenv";
 import colors from "colors";
 import Bootcamp from "./models/Bootcamp.js";
+
+const __fileURLToPatch = fileURLToPath(import.meta.url);
+const __dirname = dirname(__fileURLToPatch);
+dotenv.config({ path: `${__dirname}/config/config.env` });
 
 set("strictQuery", true);
 
@@ -13,12 +18,7 @@ connect(process.env.MONGO_URI, {
 });
 
 const bootcamps = JSON.parse(
-	fs.readFileSync(
-		`${dirname(
-			fileURLToPath(import.meta.url)
-		)}/resources/_data/bootcamps.json`,
-		"utf-8"
-	)
+	fs.readFileSync(`${__dirname}/resources/_data/bootcamps.json`, "utf-8")
 );
 
 const importData = async () => {
@@ -33,8 +33,8 @@ const importData = async () => {
 
 const deleteData = async () => {
 	try {
-		await Bootcamp.deleteMany(bootcamps);
-		console.log("Data Destroyed".green.inverse);
+		await Bootcamp.deleteMany();
+		console.log("Data Destroyed".red.inverse);
 		process.exit();
 	} catch (error) {
 		console.error(error);
