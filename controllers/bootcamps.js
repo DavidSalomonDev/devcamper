@@ -24,7 +24,10 @@ export const getBootcamps = asyncHandler(async (req, res, next) => {
 	);
 
 	// Find resource as per the filters in the request
-	query = Bootcamp.find(JSON.parse(queryStr));
+	query = Bootcamp.find(JSON.parse(queryStr)).populate({
+		path: "courses",
+		select: "title description minimumSkill",
+	});
 
 	// Select fields
 	if (req.query.select) {
@@ -86,7 +89,7 @@ export const getBootcamps = asyncHandler(async (req, res, next) => {
 // @route               GET /api/v1/bootcamps/:id
 // @access              Public
 export const getBootcamp = asyncHandler(async (req, res, next) => {
-	const bootcamp = await Bootcamp.findById(req.params.id);
+	const bootcamp = await Bootcamp.findById(req.params.id).populate("courses");
 
 	if (!bootcamp) {
 		return next(
@@ -144,7 +147,7 @@ export const updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route               DELETE /api/v1/bootcamps/:id
 // @access              Private
 export const deleteBootcamp = asyncHandler(async (req, res, next) => {
-	const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+	const bootcamp = await Bootcamp.findById(req.params.id);
 	if (!bootcamp) {
 		return next(
 			new ErrorResponse(
@@ -153,6 +156,11 @@ export const deleteBootcamp = asyncHandler(async (req, res, next) => {
 			)
 		);
 	}
+
+	// This will work when a bootcamp is deleted, courses associated with the bootcamp will cascade delete.
+
+	bootcamp.delete();
+
 	res.status(200).json({
 		success: "true",
 		message: `Delete bootcamp ${req.params.id}`,
