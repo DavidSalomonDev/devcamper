@@ -1,4 +1,5 @@
 import express from "express";
+import { protect, authorize } from "../middleware/auth.js";
 import {
 	getBootcamps,
 	getBootcamp,
@@ -18,10 +19,13 @@ router.use("/:bootcampId/courses", courseRouter);
 
 router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
 
-router.route("/").get(getBootcamps).post(createBootcamp);
+router
+	.route("/")
+	.get(getBootcamps)
+	.post(protect, authorize("publisher", "admin"), createBootcamp);
 
 router
 	.route("/:id")
 	.get(getBootcamp)
-	.put(updateBootcamp)
-	.delete(deleteBootcamp);
+	.put(protect, authorize("publisher", "admin"), updateBootcamp)
+	.delete(protect, authorize("publisher", "admin"), deleteBootcamp);

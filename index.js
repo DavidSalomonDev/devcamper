@@ -1,7 +1,10 @@
+"use-strict";
+
 import dotenv from "dotenv";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import express from "express";
+import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import colors from "colors";
 import { errorHandler } from "./middleware/error.js";
@@ -10,11 +13,15 @@ import { connectDB } from "./config/database.js";
 // Route files
 import { router as bootcamps } from "./routes/bootcamps.js";
 import { router as courses } from "./routes/courses.js";
+import { router as auth } from "./routes/auth.js";
 
 const app = express();
 
 // Body Parser
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Load env vars
 const __fileURLToPatch = fileURLToPath(import.meta.url);
@@ -32,6 +39,7 @@ if (process.env.NODE_ENV === "development") {
 // Mount routers
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
+app.use("/api/v1/auth", auth);
 
 const PORT = process.env.PORT || 5000;
 
