@@ -5,6 +5,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import cookieParser from "cookie-parser";
+import fileupload from "express-fileupload";
 import morgan from "morgan";
 import colors from "colors";
 import { errorHandler } from "./middleware/error.js";
@@ -14,6 +15,7 @@ import { connectDB } from "./config/database.js";
 import { router as bootcamps } from "./routes/bootcamps.js";
 import { router as courses } from "./routes/courses.js";
 import { router as auth } from "./routes/auth.js";
+import fileUpload from "express-fileupload";
 
 const app = express();
 
@@ -35,6 +37,9 @@ connectDB();
 if (process.env.NODE_ENV === "development") {
 	app.use(morgan("dev"));
 }
+
+// File uploading
+app.use(fileUpload());
 
 // Mount routers
 app.use("/api/v1/bootcamps", bootcamps);
