@@ -7,12 +7,20 @@ import {
 	updateCourse,
 	deleteCourse,
 } from "../controllers/courses.js";
+import Course from "../models/Course.js";
+import { advancedResults } from "../middleware/advancedResults.js";
 
 export const router = express.Router({ mergeParams: true });
 
 router
 	.route("/")
-	.get(getCourses)
+	.get(
+		advancedResults(Course, {
+			path: "bootcamp",
+			select: "name description",
+		}),
+		getCourses
+	)
 	.post(protect, authorize("publisher", "admin"), addCourse);
 router
 	.route("/:id")

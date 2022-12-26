@@ -9,6 +9,8 @@ import {
 	getBootcampsInRadius,
 	bootcampPhotoUpload,
 } from "../controllers/bootcamps.js";
+import { advancedResults } from "../middleware/advancedResults.js";
+import Bootcamp from "../models/Bootcamp.js";
 
 // Include other resource routers
 import { router as courseRouter } from "./courses.js";
@@ -26,7 +28,7 @@ router
 
 router
 	.route("/")
-	.get(getBootcamps)
+	.get(advancedResults(Bootcamp, "courses"), getBootcamps)
 	.post(protect, authorize("publisher", "admin"), createBootcamp);
 
 router
