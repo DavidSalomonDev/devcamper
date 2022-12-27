@@ -16,6 +16,7 @@ import { router as bootcamps } from "./routes/bootcamps.js";
 import { router as courses } from "./routes/courses.js";
 import { router as auth } from "./routes/auth.js";
 import { router as users } from "./routes/users.js";
+import { router as reviews } from "./routes/reviews.js";
 import fileUpload from "express-fileupload";
 
 const app = express();
@@ -47,6 +48,7 @@ app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/users", users);
+app.use("/api/v1/reviews", reviews);
 
 const PORT = process.env.PORT || 5000;
 
