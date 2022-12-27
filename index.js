@@ -69,6 +69,10 @@ app.use(hpp());
 // Enable CORS
 app.use(cors());
 
+app.get("/", (_, res) => {
+	res.sendFile(`${__dirname}/public/index.html`);
+});
+
 // Mount routers
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
