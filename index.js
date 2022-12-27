@@ -5,7 +5,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import cookieParser from "cookie-parser";
-import fileupload from "express-fileupload";
+import fileUpload from "express-fileupload";
 import morgan from "morgan";
 import colors from "colors";
 import { errorHandler } from "./middleware/error.js";
@@ -17,7 +17,14 @@ import { router as courses } from "./routes/courses.js";
 import { router as auth } from "./routes/auth.js";
 import { router as users } from "./routes/users.js";
 import { router as reviews } from "./routes/reviews.js";
-import fileUpload from "express-fileupload";
+
+// Security modules
+import mongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
+import xss from "xss-clean";
+import rateLimit from "express-rate-limit";
+import hpp from "hpp";
+import cors from "cors";
 
 const app = express();
 
@@ -42,6 +49,25 @@ if (process.env.NODE_ENV === "development") {
 
 // File uploading
 app.use(fileUpload());
+
+// Sanitize request
+app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Prevent X Site Scripting attacks
+app.use(xss());
+
+// Rate limiting
+const limiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 100 });
+app.use(limiter);
+
+// Prevent http param solution
+app.use(hpp());
+
+// Enable CORS
+app.use(cors());
 
 // Mount routers
 app.use("/api/v1/bootcamps", bootcamps);

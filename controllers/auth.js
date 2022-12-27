@@ -166,6 +166,18 @@ export const getMe = asyncHandler(async (req, res, next) => {
 	res.status(200).json({ succes: true, data: user });
 });
 
+// @description         Log user out / clean cookies
+// @route               GET /api/v1/auth/logout
+// @access              Private
+export const logout = asyncHandler(async (req, res, next) => {
+	res.cookie("token", "none", {
+		expires: new Date(Date.now() + 10 * 1000),
+		httpOnly: true,
+	});
+
+	res.status(200).json({ succes: true, data: user });
+});
+
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
 	// Create token
